@@ -9,8 +9,8 @@
 
 .flip-box-inner {
     position: relative;
-    width: 50%;
-    height: 50%;
+    width: 75%;
+    height: 75%;
     text-align: center;
     transition: transform 0.8s;
     transform-style: preserve-3d;
