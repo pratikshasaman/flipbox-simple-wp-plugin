@@ -6,7 +6,7 @@ Version : 1.0.0
 Author: Pratiksha Samane
 */
 
-function aw_include_script123() {
+function aw__script123() {
  echo"pratiksha";
     if ( ! did_action( 'wp_enqueue_media' ) ) {
         wp_enqueue_media();
