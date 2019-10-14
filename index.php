@@ -7,7 +7,7 @@ Author: Pratiksha Samane
 */
 
 function aw_include_script123() {
- 
+ echo"pratiksha";
     if ( ! did_action( 'wp_enqueue_media' ) ) {
         wp_enqueue_media();
     }
