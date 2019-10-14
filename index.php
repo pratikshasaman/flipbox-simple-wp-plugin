@@ -11,7 +11,7 @@ function aw_include_script123() {
     if ( ! did_action( 'wp_enqueue_media' ) ) {
         wp_enqueue_media();
     }
-  
+    echo"Hello pratiksha";  
     wp_enqueue_script( 'awscript', plugin_dir_url( __FILE__ ) . 'script.js', array('jquery'), null, false);
 }
 add_action( 'admin_enqueue_scripts', 'aw_include_script123' );
