@@ -60,7 +60,7 @@ function flipbox_function(){
 
 //add meta box
 function meta_box_fu12(){
-	add_meta_box("meta_box","Flipbox Setting","m_fun12","flipbox_reg","side","high");
+	add_meta_box("meta_box","Flipbox Setting","m_fun12","flipbox_reg","normal","high");
 }
 add_action("add_meta_boxes_flipbox_reg","meta_box_fu12");
 function m_fun12($post){
