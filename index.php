@@ -1,17 +1,16 @@
 <?php
 /*
-Plugin Name: Flipbox
+Plugin Name: Custom Flipbox
 Description: Flipbox plugin
 Version : 1.0.0
 Author: Pratiksha Samane
 */
 
 function aw_include_script123() {
- echo"pratiksha";
+ 
     if ( ! did_action( 'wp_enqueue_media' ) ) {
         wp_enqueue_media();
     }
-  
     wp_enqueue_script( 'awscript', plugin_dir_url( __FILE__ ) . 'script.js', array('jquery'), null, false);
 }
 add_action( 'admin_enqueue_scripts', 'aw_include_script123' );
@@ -66,52 +65,77 @@ function meta_box_fu12(){
 add_action("add_meta_boxes_flipbox_reg","meta_box_fu12");
 function m_fun12($post){
 	?>
-	<div>
-		<div>
-			<label><strong>Upload Image:</strong></label><br><br>
-			<input type="text" name="text_box" value="<?php echo get_post_meta($post->ID,"img1",true);?>" id="disp"><br><br>
-			<input type="submit" name="upload_img" value="Choose Image" id="upload_image">
-		</div>
-		<br><br>
-		<div>
-			<label><strong>Select Effect:</strong></label>
-
-			<select name="select_option">
-				<option>Top to bottom</option>
-				<option>Left to right</option>
-			</select>
-		</div>
-		<br><br>
-		<div>
-			<label><strong>Enter Text:</strong></label><br><br>
-			<textarea rows="5" cols="30" name="description"><?php echo get_post_meta($post->ID,"desp",true);?></textarea>
-		</div>
-	</div>
+	<table class="form-table" role="presentation">
+		<tbody>
+			<tr class="form-field form-required">
+				<th scope="row">
+					<span class="dashicons dashicons-format-image"></span>
+					<label>Upload Image:</label>
+				</th>
+				<td>
+					<?php $output_img = get_post_meta($post->ID,"post_meta_val",true);
+					// var_dump($output_img);die(); 
+              		$img = isset($output_img['img1']) ? $output_img['img1'] : '';
+              		$description = isset($output_img['desp']) ? $output_img['desp'] : '';
+					?>
+					<input type="text" name="text_box" id="disp" value="<?php echo  $img; ?>">
+					<p class="description"></p>
+				</td>
+				<td>
+					<input type="submit" name="upload_img" value="Choose Image" class="button button-primary button-large" id="upload_image">
+				</td>
+			</tr>
+			<tr class="form-field form-required">
+				<th scope="row">
+					<span class="dashicons dashicons-image-flip-horizontal"></span>
+					<label>Flip Type:</label>
+				</th>
+				<td>
+					<select name="select_option" style="min-width: 50%;">
+						<option>Top to bottom</option>
+						<option>Left to right</option>
+					</select>
+				</td>
+			</tr>
+			<tr class="form-field form-required">
+				<th scope="row">
+					<span class="dashicons dashicons-star-filled"></span>
+					<label>BackEnd Text:</label>
+				</th>
+				<td>
+					<textarea rows="5" cols="30" name="description"><?php echo $description;?></textarea>
+				</td>
+			</tr>
+		</tbody>
+	</table>
 	<?php
 }
 
 add_action("save_post","save_function");
 function save_function($post_id){
-	$val= isset($_REQUEST['description']) ? trim($_REQUEST['description']) : "";
-	$val2= isset($_REQUEST['select_option']) ? trim($_REQUEST['select_option']) : "";
-	$val3= isset($_REQUEST['text_box']) ? trim($_REQUEST['text_box']) : "";
-	$val4= isset($_REQUEST['shortcode']) ? trim($_REQUEST['shortcode']) : "";
-	// var_dump($val4);die();
-	if (!empty($val) && !empty($val2) && !empty($val3)) {
-		$arr=array( $val,$val2,$val3,$val4);
-update_post_meta($post_id, "post_meta_val",$arr,true);
-        // update_post_meta($post_id, "img1", $val3,true);
-        // update_post_meta($post_id, "desp", $val,true);
-        // update_post_meta($post_id, "select_opt",$val2,true);
+	$Description= isset($_REQUEST['description']) ? trim($_REQUEST['description']) : "";
+	$select_option= isset($_REQUEST['select_option']) ? trim($_REQUEST['select_option']) : "";
+	$image_url= isset($_REQUEST['text_box']) ? trim($_REQUEST['text_box']) : "";
+	$shortcode= isset($_REQUEST['shortcode']) ? trim($_REQUEST['shortcode']) : "";
+	if (!empty($Description) && !empty($select_option) && !empty($image_url) && !empty($shortcode)) {	
+		
+		$defaults = array(
+                    // General Settings.
+                        'img1'     =>  $image_url,
+                        'desp'   => $Description,
+                        'select_opt' =>$select_option,
+                        'shortcode'=>$shortcode,
+                    );
+		update_post_meta($post_id, "post_meta_val",$defaults,true);
     }
 }
 
 function flipbox_shortcode_fun($atts){
-	$a=get_post_meta($atts['id'],'img1',true);
-	// var_dump($a);
-	$b=get_post_meta($atts['id'],'desp',true);
-	$c=get_post_meta($atts['id'],'select_opt',true);
-	// var_dump(array($a,$b,$c));	
+	$output_img = get_post_meta($atts['id'],"post_meta_val",true);
+	$a=$output_img['img1'];
+	$b=$output_img['desp'];
+	$c=$output_img['select_opt'];
+	
 	$flip='';
 	if($c=='Left to right')
 	{
@@ -121,18 +145,22 @@ function flipbox_shortcode_fun($atts){
 		$flip='vertical';
 	}
 	?>
-<div class="flip-box" id="flip-id">
-          <div class="flip-box-inner <?php echo( $flip ); ?>" id="inner-id">
-            <div class="flip-box-front">
-              <img src="<?php echo $a; ?>" alt="Smiley face" />
-            </div>
-            <div class="flip-box-back" id="inner-back">
-              <div>
-                  <?php echo $b; ?>
-              </div>
-            </div>
-          </div>
-        </div>
+		<div class="card1 flip-box">
+			<div class="flip-box-inner <?php echo( $flip ); ?>">
+				<div class="front">
+					<div class="step1">
+						<!-- <div class="step2"> -->
+							<img src="<?php echo $a; ?>"/>
+						<!-- </div> -->
+					</div>					
+				</div>	
+				<div class="back"<?php echo( $flip == 'horizontal') ? "style='transform: rotateY(180deg);'" : "style='transform: rotateX(180deg);'";?>>
+					<div class="back-content">
+						<?php echo $b; ?>
+					</div>
+				</div>
+			</div>
+		</div>
 	<?php
 }
 add_shortcode("flipAnything","flipbox_shortcode_fun");
@@ -142,9 +170,12 @@ function meta_box_function(){
 }
 add_action("add_meta_boxes","meta_box_function");
 function meta_fun(){
-?>
-<strong>Shortcode:</strong><input type="text" name="shortcode" value='<?php echo "[flipAnything id=".get_the_id()." title=".get_the_title()."]"?>'>
-<?php
+	?>
+	<em><strong>Shortcode for posts/pages/plugins</strong></em>
+	<p>Copy & paste the shortcode directly into any WordPress post or page.</p>
+<input type="text" name="shortcode" value="<?php echo "[flipAnything id=".get_the_id()." title=".get_the_title()."]";?>" style="width: 250px;">
+ 
+ <?php
 }
 
  function addcolumn($columns)
