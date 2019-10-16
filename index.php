@@ -5,7 +5,7 @@ Description: Flipbox plugin
 Version : 1.0.0
 Author: Pratiksha Samane
 */
-
+echo "hello World!!1";
 function aw_include_script123() {
  
     if ( ! did_action( 'wp_enqueue_media' ) ) {
