@@ -4,16 +4,15 @@ Plugin Name: Custom Flipbox
 Description: Flipbox plugin
 Version : 1.0.0
 Author: Pratiksha Samane
-*/
+*/ 
 
-function aw_include_script123() {
- 
+function load_script() { 
     if ( ! did_action( 'wp_enqueue_media' ) ) {
         wp_enqueue_media();
     }
     wp_enqueue_script( 'awscript', plugin_dir_url( __FILE__ ) . 'script.js', array('jquery'), null, false);
 }
-add_action( 'admin_enqueue_scripts', 'aw_include_script123' );
+add_action( 'admin_enqueue_scripts', 'load_script' );
 
 function load_style() {
     wp_register_style( 'style',  plugin_dir_url( __FILE__ ) . 'style.css' );
@@ -73,8 +72,7 @@ function m_fun12($post){
 					<label>Upload Image:</label>
 				</th>
 				<td>
-					<?php $output_img = get_post_meta($post->ID,"post_meta_val",true);
-					// var_dump($output_img);die(); 
+					<?php $output_img = get_post_meta($post->ID,"post_meta_val",true); 
               		$img = isset($output_img['img1']) ? $output_img['img1'] : '';
               		$description = isset($output_img['desp']) ? $output_img['desp'] : '';
 					?>
@@ -105,7 +103,35 @@ function m_fun12($post){
 				<td>
 					<textarea rows="5" cols="30" name="description"><?php echo $description;?></textarea>
 				</td>
+				<!-- <td id="show-image"> -->
+					<!-- <img src="" id="show-image" style="height: 100px;width:100px;"/> -->
+				<!-- </td> -->
 			</tr>
+			<!-- <tr class="form-field form-required">
+				<th scope="row" id="lbl"></th>
+				<td id="show-image"></td>
+			</tr>
+			<tr>
+				<th></th>
+				<td id="btn"></td>
+			</tr> -->
+			<tr>
+				<th scope="row">
+					<span class="dashicons dashicons-format-image"></span>
+					<label>Image:</label>
+				</th>
+				<td>
+					<?php $disp_img = isset($output_img['img1']) ? $output_img['img1'] : 'http://localhost/testsite/wp-content/plugins/new-repository/no.jpg';?>
+					<img src='<?php echo $disp_img; ?>' id="show-image" style="height:100px; width:150px;border: 2px solid black;"/>
+				</td>
+			</tr>
+		<!-- 	<tr>
+				<th></th>
+				<td>
+					<button id='remove-btn' class='button button-primary button-large'>Remove Image</button>
+				</td>
+			</tr> -->
+			
 		</tbody>
 	</table>
 	<?php
@@ -113,6 +139,7 @@ function m_fun12($post){
 
 add_action("save_post","save_function");
 function save_function($post_id){
+	if($_REQUEST['publish'] || $_REQUEST['save']) {
 	$Description= isset($_REQUEST['description']) ? trim($_REQUEST['description']) : "";
 	$select_option= isset($_REQUEST['select_option']) ? trim($_REQUEST['select_option']) : "";
 	$image_url= isset($_REQUEST['text_box']) ? trim($_REQUEST['text_box']) : "";
@@ -127,6 +154,8 @@ function save_function($post_id){
                         'shortcode'=>$shortcode,
                     );
 		update_post_meta($post_id, "post_meta_val",$defaults,true);
+    }
+    // var_dump( $_REQUEST['publish']);
     }
 }
 

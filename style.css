@@ -78,3 +78,6 @@ img{
     width: 276px;
     height: 347px;
 }
+#remove-btn{
+    display: none;
+}
