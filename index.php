@@ -4,8 +4,9 @@ Plugin Name: Custom Flipbox
 Description: Flipbox plugin
 Version : 1.0.0
 Author: Pratiksha Samane
-*/
-function load_script() {
+*/ 
+
+function load_script() { 
     if ( ! did_action( 'wp_enqueue_media' ) ) {
         wp_enqueue_media();
     }
